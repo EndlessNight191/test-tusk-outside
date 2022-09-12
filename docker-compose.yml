@@ -1,0 +1,41 @@
+version: '3.8'
+
+
+services:
+  dev:
+    container_name: nestjs_api_dev
+    image: nestjs-api-dev:1.0.0
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+    command: npm run start:debug
+    ports:
+      - 3000:3000
+      - 9229:9229
+    networks:
+      - nesjs-network
+    volumes:
+      - ./src
+      - ./node_modules
+    depends_on:
+      - db
+    links:
+      - db
+    restart: unless-stopped
+
+  db:
+    container_name: test_outside
+    image: postgres:14.0-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=${TYPEORM_USERNAME}
+      - POSTGRES_PASSWORD=${TYPEORM_PASSWORD}
+      - POSTGRES_DB=${TYPEORM_DATABASE}
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - ${TYPEORM_PORT}:${TYPEORM_PORT}
+
+networks:
+  nesjs-network:

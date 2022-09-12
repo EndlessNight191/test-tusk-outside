@@ -1,15 +1,14 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
 
-export class addTagDto {
+export class updateTagDto {
   @IsString()
-  @IsNotEmpty()
   @MinLength(4)
   @MaxLength(40)
+  @IsOptional()
   readonly name: string;
 
   @IsNumber()
-  @IsNotEmpty()
   @IsOptional()
   sortOrder?: number;
 }
